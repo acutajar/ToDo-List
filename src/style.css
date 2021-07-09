@@ -1,0 +1,244 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    font-family: 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#content {
+    color: rgb(221, 221, 221);
+    display: grid;
+    width: 100%;
+    height:100vh;
+    grid-template-rows: minmax(100px, 10%) auto minmax(35px, 4%);
+    grid-template-columns: minmax(210px, 17%) minmax(700px, auto);
+    font-size: 40px;
+    opacity: 100%;
+    pointer-events: all;
+}
+
+/*      Header styling       */
+
+#header {
+    display: flex;
+    align-items:flex-end;
+    color: rgb(48, 71, 94);
+    grid-column: span 2;
+    background-color:rgb(240, 84, 84);
+    min-height: 100px;
+    padding: 15px;
+    font-size:70px;
+}
+
+/*        Nav Bar Styling        */
+
+
+#navBarContainer {
+    display: grid;
+    grid-template-rows: 170px auto;
+}
+
+#projectsHeader {
+    text-decoration: underline;
+}
+
+.navBar {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    background-color: rgb(48, 71, 94);
+    align-items:stretch;
+}
+
+.navItem {
+    word-break: break-all;
+    padding: 8px;
+    font-size: 30px;
+    cursor: pointer;
+}
+.navItem:hover {
+    transition: .1s;
+    transform: scale(1.03);
+    color:rgb(167, 167, 167);
+}
+
+.navItem:active{
+    transform: scale(.95);
+}
+
+#addProjectButton {
+    display: flex;
+}
+
+
+#projectForm {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px;
+    font-size: 30px;
+    max-width: 185px;
+}
+
+
+/*          Page title and Add / Sort         */
+
+
+#currentPage {
+    display: grid;
+    grid-template-rows: 110px auto;
+    font-size: 25px;
+}
+
+#pageTitle {
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    color: rgb(48, 71, 94);
+    background-color: rgb(240, 240, 240);
+}
+
+#title {
+    padding-right: 25px;
+    font-size: 40px;
+}
+
+.addTask {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px 7px 3px 7px;
+    border: 1px solid rgb(48, 71, 94);
+    display:flex;
+    cursor: pointer;
+}
+
+.addTask:hover {
+    transition: .1s;
+    transform: scale(1.03);
+    color:rgb(0, 0, 0);
+}
+.addTask:active{
+    transform: scale(.99);
+}
+
+.sortBy {
+    display: flex;
+    padding: 3px 7px 3px 7px;
+    border: 1px solid rgb(48, 71, 94);
+}
+#ddlSort {
+    margin-top: auto;
+    margin-left: 8px;
+    font-size: 17px;
+    width: 150px;
+    height: 25px;
+}
+/*          Tasks and Task Cards         */
+
+
+#taskDisplay {
+    color: rgb(48, 71, 94);
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(240, 240, 240);
+    padding-top: 10px;
+}
+
+.taskCard {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    grid-template-columns: 50px auto;
+    border: 2px solid rgb(48, 71, 94);
+    margin: 20px 20px 0px 20px;
+    opacity: 100%;
+}
+
+.taskComplete {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: span 2;
+}
+
+.upperCardContainer {
+    text-decoration: none;
+    display: flex;
+    justify-content:space-between;
+    padding-left: 10px;
+    padding-right: 7%;
+    font-size: 30px;
+}
+
+.lowerCardContainer {
+    text-decoration: none;
+    display:flex;
+    justify-content:space-between;
+    padding-left: 5%;
+    padding-right: 7%;
+    font-size: 22px;
+}
+
+.cardButtons {
+    grid-column: span 2;
+    display:flex;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.editTask {
+    border-radius: 5%;
+    margin: 0px 5px 2px 5px;
+    background-color: rgb(48, 71, 94);
+    color:rgb(240, 240, 240);
+    font-size: 15px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.deleteTask {
+    border-radius: 5%;
+    margin: 0px 5px 2px 5px;
+    background-color: rgb(240, 84, 84);
+    font-size: 15px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+
+
+
+#footer {
+    grid-column: span 2;
+    background-color: rgb(240, 84, 84);
+}
+
+
+
+/*          Task Form            */
+.form-popup {
+    display: none;
+    position: absolute;
+    border: 3px solid rgb(48, 71, 94);
+    background-color: rgb(240, 240, 240);
+    align-items: center;
+    margin: 50px;
+    font-size: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-label {
+    padding: 10px;
+}
+
+
