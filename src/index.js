@@ -6,17 +6,16 @@ import { populateProjectSidebar, populateTasks } from './modules/guiManager.js';
 
 
 
-// setting up some default tasks and projects if user's local storage is empty //
+// // setting up some default tasks and projects if user's local storage is empty //
 const preLoadedTasks = [["Test Task", "07/16/2021", "1", "test description", "undefined", false, "Test Taskundefined"], ["do cool stuff", "07/29/2021", "0", "", "test project", false, "do cool stufftest project"], ["do more cool stuff", "09/23/2021", "2", "really informative description", "random project #2", false, "do more cool stuffrandom project #2"]];
 const preLoadedProjects = ["test project", "random project #2"];
 
-if (localStorage.getItem("savedTasks") != null) {
+if (localStorage.getItem("savedTasks") == null) {
     localStorage.setItem('savedTasks', JSON.stringify(preLoadedTasks));
 }
-if (localStorage.getItem("savedProjects") != null) {
+if (localStorage.getItem("savedProjects") == null) {
     localStorage.setItem('savedProjects', JSON.stringify(preLoadedProjects));
 }
-
 
 
 // actual page code begins here
