@@ -1,5 +1,4 @@
-import { differenceInDays, format, isToday, startOfToday } from 'date-fns';
-import { currentPage } from './controller';
+import { differenceInDays, isToday, startOfToday } from 'date-fns';
 
 /*
     Loads tasks from local storage,
@@ -8,31 +7,27 @@ import { currentPage } from './controller';
     saves tasks to local storage
 */
 
-// adding in test tasks from localstorage //
-let masterTaskList = [];
-let storagetest = [['task1name', '12/12/1222', , 'low', 'task1project', false], ['task2name', '12/12/1233', , 'medium', 'task2project', true], ['task3name', "N/a", "this is my long description", "12/12/333", 'high', false]]
-localStorage.setItem("savedTasks", JSON.stringify(storagetest));
-//////////////
 
-const taskFactory = (name, dueDate = "", priority, description = "", project = "undefined", complete = false) => {
-    return { name, dueDate, description, priority, project, complete }
+let masterTaskList = [];
+
+
+const taskFactory = (name, dueDate = "", priority = "N/a", description = "", project = "undefined", complete = false) => {
+    const taskID = name + project;
+    return { name, dueDate, priority, description, project, complete, taskID }
 };
 
 const addTaskToMaster = (taskArr) => {
-    if (taskArr[1].length > 0) {
-        taskArr[1] = format(new Date(taskArr[1] + "T00:00"), "MM/dd/yyyy");
-    } else {
-        taskArr[1] = "N/a"
-    }
     let myTask = taskFactory(...taskArr);
     masterTaskList.push(myTask);
 }
 
 const loadTasksFromStorage = () => {
     masterTaskList = [];
-    JSON.parse(localStorage.getItem("savedTasks")).forEach(element => {
-        addTaskToMaster(element)
-    });
+    if (localStorage.getItem("savedTasks") != null) {
+        JSON.parse(localStorage.getItem("savedTasks")).forEach(element => {
+            addTaskToMaster(element);
+        });
+    }
 }
 
 const convertTaskAttributesToArray = () => {
@@ -45,31 +40,31 @@ const convertTaskAttributesToArray = () => {
 }
 
 const saveTasks = () => {
-    localStorage.clear();
     localStorage.setItem("savedTasks", JSON.stringify(convertTaskAttributesToArray()));
 }
 
-const deleteSingleTask = (deletedTask) => {
-    const deletedIndex = masterTaskList.findIndex(element => (element.name == deletedTask.name && element.project == deleteTask.project))
+const deleteSingleTask = (event) => {
+    const deletedIndex = masterTaskList.findIndex(element => (element.taskID == event.path[2].id))
     masterTaskList.splice(deletedIndex, 1)
 }
 
 const deleteProjectTasks = (projectName) => {
-    let i = 0
-    masterTaskList.forEach(task => {
-        if (task.project == projectName) {
-            masterTaskList.splice(i, 1);
-        }
-        i++;
-    });
+    masterTaskList = masterTaskList.filter(task => (task.project != projectName));
+}
+
+const checkTaskComplete = (event) => {
+    const checkedIndex = masterTaskList.findIndex(element => (element.taskID == event.path[2].id));
+    if (masterTaskList[checkedIndex].complete == true) {
+        masterTaskList[checkedIndex].complete = false;
+    } else {
+        masterTaskList[checkedIndex].complete = true;
+    }
 }
 
 const filterTasksByProject = (projectName) => {
     let filteredList = []
-    console.log('current page set to: ' + currentPage)
-    console.log("project name set to: " + projectName);
     if (projectName == "All Tasks") {
-        filteredList = masterTaskList;
+        filteredList = masterTaskList.slice(0);
     } else if (projectName == "Today") {
         filteredList = masterTaskList.filter(task => isToday(new Date(task.dueDate)));
     } else if (projectName == "7 Days") {
@@ -83,8 +78,6 @@ const filterTasksByProject = (projectName) => {
     return filteredList;
 }
 
-
-
 const sortTasks = (taskArray, selection) => {
     let sortedTasks = []
     if (selection == "default") {
@@ -92,7 +85,15 @@ const sortTasks = (taskArray, selection) => {
     } else if (selection == "priority") {
         sortedTasks = taskArray.sort((a, b) => parseInt(a.priority) > parseInt(b.priority) ? 1 : -1)
     } else if (selection == "dueDate") {
-        sortedTasks = taskArray.sort((a, b) => new Date(a.dueDate) > new Date(b.dueDate) ? 1 : -1);
+        sortedTasks = taskArray.sort((a, b) => {
+            if (a.dueDate == "") {
+                return 1;
+            } else if (new Date(a.dueDate) > new Date(b.dueDate)) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
     } else if (selection == "project") {
         sortedTasks = taskArray.sort((a, b) => {
             if (a.project == "undefined") {
@@ -112,7 +113,7 @@ const sortTasks = (taskArray, selection) => {
 export {
     addTaskToMaster, loadTasksFromStorage, saveTasks,
     deleteSingleTask, deleteProjectTasks, filterTasksByProject,
-    sortTasks
+    sortTasks, checkTaskComplete
 };
 
 export { masterTaskList };

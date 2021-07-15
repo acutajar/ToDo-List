@@ -2,14 +2,18 @@ import { deleteProjectTasks } from './taskManager'
 let projectList = [];
 
 const addNewProject = (projectName) => {
-    projectList.push(projectName);
+    if (projectName != "undefined") {
+        projectList.push(projectName);
+    }
 }
 
 const loadProjectsFromStorage = () => {
     projectList = [];
-    JSON.parse(localStorage.getItem("savedProjects")).forEach(project => {
-        addNewProject(project);
-    });
+    if (localStorage.getItem("savedProjects") != null) {
+        JSON.parse(localStorage.getItem("savedProjects")).forEach(project => {
+            addNewProject(project);
+        });
+    }
 }
 
 const saveProjects = () => {
@@ -23,7 +27,8 @@ const deleteProject = (deletedProject) => {
 }
 
 export {
-    addNewProject, loadProjectsFromStorage, deleteProject
+    addNewProject, loadProjectsFromStorage, deleteProject,
+    saveProjects
 };
 
 export { projectList };

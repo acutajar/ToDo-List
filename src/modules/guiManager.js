@@ -1,7 +1,7 @@
-import { masterTaskList, addTaskToMaster, deleteSingleTask, filterTasksByProject, sortTasks } from './taskManager.js';
-import { projectList, addNewProject, loadProjectsFromStorage, deleteProject } from "./projectManager";
+import { masterTaskList, deleteSingleTask, filterTasksByProject, sortTasks, checkTaskComplete } from './taskManager.js';
+import { projectList, deleteProject } from "./projectManager";
 import { currentPage, setCurrentPage } from './controller.js';
-
+import format from 'date-fns/format';
 
 
 ////////////////////////////// Task Functions //////////////////////////////
@@ -12,6 +12,7 @@ const btnCloseTask = document.getElementById('btnCloseTask');
 function generateTaskCard(task) {
     //create main container and sub containers
     const myCard = document.createElement('div');
+    myCard.setAttribute('id', task.name + task.project)
     myCard.setAttribute('class', 'taskCard');
     const taskCompleteContainer = document.createElement('div');
     taskCompleteContainer.setAttribute('class', "taskComplete");
@@ -38,6 +39,10 @@ function generateTaskCard(task) {
     } else {
         taskComplete.setAttribute('src', './images/circle_unchecked.svg');
     }
+    taskComplete.addEventListener('click', function () {
+        checkTaskComplete(event);
+        populateTasks(currentPage);
+    })
     taskCompleteContainer.appendChild(taskComplete);
 
     //title and project names
@@ -66,6 +71,10 @@ function generateTaskCard(task) {
     const btnDelete = Object.assign(document.createElement('button'), { id: 'deleteTask' });
     btnDelete.setAttribute('class', 'deleteTask');
     btnDelete.innerHTML = "Delete Task";
+    btnDelete.addEventListener('click', function () {
+        deleteSingleTask(event);
+        populateTasks(currentPage);
+    })
     cardButtons.appendChild(btnEdit);
     cardButtons.appendChild(btnDelete);
 
@@ -88,18 +97,42 @@ function populateTasks(pageName) {
     displayedTasks.forEach(task => generateTaskCard(task));
 }
 
+function showTaskForm(newTaskOrEditTask) {
+    if (newTaskOrEditTask == "newTask") {
+        document.getElementById('taskFormTitle').textContent = "New Task";
+    } else {
+        document.getElementById('taskFormTitle').textContent = "View/Edit Task";
+        const editedIndex = masterTaskList.findIndex(element => (element.taskID == newTaskOrEditTask.id))
+        const taskObjectMap = ['name', 'dueDate', 'priority', 'description'];
+        let myTaskObject = masterTaskList[editedIndex];
+        if (myTaskObject.dueDate != "") {
+            myTaskObject.dueDate = format(new Date(myTaskObject.dueDate), "yyyy-MM-dd")
+        }
+        for (let i = 0; i <= 3; i++) {
+            document.forms[1][i].value = masterTaskList[editedIndex][taskObjectMap[i]];
+        }
+    }
+    document.getElementById('popup').style.display = 'flex';
+    document.getElementById('taskName').select();
+    document.getElementById('content').style.opacity = '60%';
+    document.getElementById("content").style.pointerEvents = "none"
+}
 
 btnCloseTask.addEventListener('click', closeTaskForm);
+
+let newTaskOrEditTask = ""
 document.addEventListener('click', function (event) {
     const myPopup = document.getElementById('popup');
     if (myPopup.style.display != "flex" && event.target.closest("#addTask")) {
-        document.getElementById('popup').style.display = 'flex';
-        document.getElementById('content').style.opacity = '60%';
-        document.getElementById("content").style.pointerEvents = "none"
+        newTaskOrEditTask = "newTask";
+        showTaskForm(newTaskOrEditTask);
+    } else if (myPopup.style.display != "flex" && event.target.closest("#editTask")) {
+        newTaskOrEditTask = event.path[2];
+        showTaskForm(newTaskOrEditTask);
     } else if (!event.target.closest('.form-popup')) {
         closeTaskForm();
-        document.getElementById("content").style.pointerEvents = "all"
     }
+    document.getElementById("content").style.pointerEvents = "all"
     // Opens & closes the task form with any click outside the form... there's likely a better way to do this but I dont know what it is.
 });
 
@@ -153,6 +186,20 @@ btnNewProject.addEventListener('click', showNewProjectForm);
 function navigateToPage(pageID) {
     setCurrentPage(pageID)
     document.getElementById('title').innerHTML = currentPage;
+    if (pageID != "All Tasks" && pageID != "Today" && pageID != "7 Days") {
+        document.getElementById('projectOption').style.display = "none";
+        const btnDeleteProject = Object.assign(document.createElement('div'), { id: pageID });
+        btnDeleteProject.setAttribute('class', 'deleteProject')
+        btnDeleteProject.textContent = "delete project";
+        btnDeleteProject.addEventListener('click', function () {
+            deleteProject(pageID)
+            navigateToPage("All Tasks")
+            populateProjectSidebar(projectList);
+        });
+        document.getElementById('title').appendChild(btnDeleteProject);
+    } else {
+        document.getElementById('projectOption').style.display = "block";
+    }
     ddlSort.value = "default";
     populateTasks(currentPage);
 
@@ -170,3 +217,4 @@ export {
     closeTaskForm, closeNewProject, populateProjectSidebar,
     populateTasks, navigateToPage
 }
+export { newTaskOrEditTask }

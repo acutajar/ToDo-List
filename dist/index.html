@@ -13,7 +13,7 @@
 
 
     <div id="content">
-        <div id="header">To-Do / Alec Cutajar</div>
+        <div id="header">My To-Do List </div>
         <div id="navBarContainer">
             <div id="upperNavBar" class="navBar">
                 <div id="All Tasks" class="navItem">All Tasks</div>
@@ -30,7 +30,7 @@
                         <div id="newProjectForm">
                             <form action="new-project" id='projectForm' onsubmit="">
                                 <input type="text" name="newProjectName" maxlength="25" id="newProjectName"
-                                    placeholder="Project name.." required="true">
+                                    placeholder="Project name.." required="true" autocomplete="off">
                                 <div style="margin: auto;">
                                     <button type="submit" id="submit">Create</button>
                                     <button type="button" id="closeNewProject">Cancel</button>
@@ -43,7 +43,7 @@
         </div>
         <div id="currentPage">
             <div id="pageTitle">
-                <div id="title">All Tasks</div>
+                <div id="title">All Tasks </div>
                 <div id="addTask" class='addTask'>
                     <img class="icon" src="./images/add_circle.svg">
                     <div>Add New Task</div>
@@ -54,7 +54,7 @@
                         <option value='default'>Default</option>
                         <option value='dueDate'>Due Date</option>
                         <option value='priority'>Priority</option>
-                        <option value='project'>Project</option>
+                        <option id='projectOption' value='project'>Project</option>
                     </select>
                 </div>
             </div>
@@ -69,10 +69,10 @@
 
     <div id='popup' class='form-popup'>
         <form action="new-task" class='form-container' id='taskForm'>
-            <h2>New Task</h2>
+            <h2 id=taskFormTitle>New Task</h2>
             <div class="form-label">
                 <label for="taskName" class="form-label">Task Name:</label>
-                <input type="text" name="taskName" id="taskName" placeholder="Task name..">
+                <input type="text" name="taskName" id="taskName" placeholder="Task name.." autocomplete="off">
             </div>
             <div class="form-label">
                 <label for="dueDate" class="form-label">Due Date:</label>

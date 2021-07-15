@@ -1,7 +1,8 @@
 
-import { masterTaskList, addTaskToMaster, deleteSingleTask, filterTasksByProject, sortTasks } from './taskManager.js';
-import { projectList, addNewProject, loadProjectsFromStorage, deleteProject } from "./projectManager";
-import { closeTaskForm, closeNewProject, populateProjectSidebar, populateTasks, navigateToPage } from "./guiManager";
+import { masterTaskList, addTaskToMaster } from './taskManager.js';
+import { projectList, addNewProject } from "./projectManager";
+import { closeTaskForm, closeNewProject, populateProjectSidebar, populateTasks, navigateToPage, newTaskOrEditTask } from "./guiManager";
+import format from 'date-fns/format';
 
 let currentPage = "All Tasks"
 
@@ -9,28 +10,50 @@ function setCurrentPage(pageID) {
     currentPage = pageID;
 }
 
-function submitTaskForm(event) {
-    //check if the same task name/project combo exists already
-    // if (masterTaskList.some(taskObject => (taskObject.name == event.target.elements[0].value && taskObject.project == currentPage))) {
-    //     alert('unable to reuse task names within the same project scope, please choose a different task name');
-    //     event.target.elements[0].value = ""
-    // } else {
-    let taskArr = [];
-    for (let i = 0; i <= 3; i++) {
-        taskArr.push(event.target.elements[i].value)
-    }
+function submitTaskForm(event, newTaskOrEditTask) {
+    // check if the same task name / project combo exists already
+    let myProjectPage = ""
     if (currentPage == "All Tasks" || currentPage == "Today" || currentPage == "7 Days") {
-        taskArr.push("undefined");
+        myProjectPage = "undefined";
+    } else {
+        myProjectPage = currentPage;
     }
-    addTaskToMaster(taskArr);
+    if (newTaskOrEditTask == "newTask") {
+        if (masterTaskList.some(taskObject => (taskObject.taskID == event.target.elements[0].value + myProjectPage))) {
+            alert('unable to reuse task names within the same project scope, please choose a different task name');
+            event.target.elements[0].value = ""
+            event.preventDefault();
+            return;
+        } else {
+            let taskArr = [];
+            for (let i = 0; i <= 3; i++) {
+                taskArr.push(event.target.elements[i].value)
+            }
+            if (taskArr[1] !== "") {
+                taskArr[1] = format(new Date(taskArr[1] + "T00:00"), "MM/dd/yyyy");
+            }
+            taskArr.push(myProjectPage);
+            addTaskToMaster(taskArr);
+        }
+    } else {
+        const editedIndex = masterTaskList.findIndex(element => (element.taskID == newTaskOrEditTask.id))
+        const taskObjectMap = ['name', 'dueDate', 'priority', 'description'];
+        for (let i = 0; i <= 3; i++) {
+            masterTaskList[editedIndex][taskObjectMap[i]] = event.target.elements[i].value;
+        }
+        if (masterTaskList[editedIndex].dueDate != "") {
+            masterTaskList[editedIndex].dueDate = format(new Date(masterTaskList[editedIndex].dueDate + "T00:00"), "MM/dd/yyyy");
+        }
+        masterTaskList[editedIndex].taskID = masterTaskList[editedIndex].name + masterTaskList[editedIndex].project;
+    }
     closeTaskForm();
     populateTasks(currentPage);
-    // }
     event.preventDefault();
 }
 
+
 const taskForm = document.getElementById('taskForm');
-taskForm.addEventListener('submit', submitTaskForm);
+taskForm.addEventListener('submit', function () { submitTaskForm(event, newTaskOrEditTask) });
 
 
 function submitNewProject(event) {
