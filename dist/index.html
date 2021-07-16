@@ -1,103 +1,117 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>To-Do List</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
 
-<body>
-
-
+  <body>
     <div id="content">
-        <div id="header">My To-Do List </div>
-        <div id="navBarContainer">
-            <div id="upperNavBar" class="navBar">
-                <div id="All Tasks" class="navItem">All Tasks</div>
-                <div id="Today" class="navItem">Today</div>
-                <div id="7 Days" class="navItem">7 Days</div>
-            </div>
-            <div id="lowerNavBar" class="navBar">
-                <div id="projectsHeader">Projects
-                    <div id="addProject">
-                        <div id="addProjectButton" class='navItem'>
-                            <img class="icon" src="./images/add_box.svg">
-                            <div style="font-size: 20px; padding-left: 5px;"> New Project</div>
-                        </div>
-                        <div id="newProjectForm">
-                            <form action="new-project" id='projectForm' onsubmit="">
-                                <input type="text" name="newProjectName" maxlength="25" id="newProjectName"
-                                    placeholder="Project name.." required="true" autocomplete="off">
-                                <div style="margin: auto;">
-                                    <button type="submit" id="submit">Create</button>
-                                    <button type="button" id="closeNewProject">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div id="header">My To-Do List</div>
+      <div id="navBarContainer">
+        <div id="upperNavBar" class="navBar">
+          <div id="All Tasks" class="navItem">All Tasks</div>
+          <div id="Today" class="navItem">Today</div>
+          <div id="7 Days" class="navItem">7 Days</div>
         </div>
-        <div id="currentPage">
-            <div id="pageTitle">
-                <div id="title">All Tasks </div>
-                <div id="addTask" class='addTask'>
-                    <img class="icon" src="./images/add_circle.svg">
-                    <div>Add New Task</div>
+        <div id="lowerNavBar" class="navBar">
+          <div id="projectsHeader">
+            Projects
+            <div id="addProject">
+              <div id="addProjectButton" class="navItem">
+                <img class="icon" src="./images/add_box.svg" />
+                <div style="font-size: 20px; padding-left: 5px">
+                  New Project
                 </div>
-                <div class="sortBy">
-                    <div>Sort By:</div>
-                    <select name="ddlSort" id="ddlSort">
-                        <option value='default'>Default</option>
-                        <option value='dueDate'>Due Date</option>
-                        <option value='priority'>Priority</option>
-                        <option id='projectOption' value='project'>Project</option>
-                    </select>
-                </div>
+              </div>
+              <div id="newProjectForm">
+                <form action="new-project" id="projectForm" onsubmit="">
+                  <input
+                    type="text"
+                    name="newProjectName"
+                    maxlength="25"
+                    id="newProjectName"
+                    placeholder="Project name.."
+                    required="true"
+                    autocomplete="off"
+                  />
+                  <div style="margin: auto">
+                    <button type="submit" id="submit">Create</button>
+                    <button type="button" id="closeNewProject">Cancel</button>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div id="taskDisplay">
-            </div>
+          </div>
         </div>
-        <div id="footer"></div>
+      </div>
+      <div id="currentPage">
+        <div id="pageTitle">
+          <div id="title">All Tasks</div>
+          <div id="addTask" class="addTask">
+            <img class="icon" src="./images/add_circle.svg" />
+            <div>Add New Task</div>
+          </div>
+          <div class="sortBy">
+            <div>Sort By:</div>
+            <select name="ddlSort" id="ddlSort">
+              <option value="default">Default</option>
+              <option value="dueDate">Due Date</option>
+              <option value="priority">Priority</option>
+              <option id="projectOption" value="project">Project</option>
+            </select>
+          </div>
+        </div>
+        <div id="taskDisplay"></div>
+      </div>
+      <div id="footer"></div>
     </div>
 
+    <div id="popup" class="form-popup">
+      <form action="new-task" class="form-container" id="taskForm">
+        <h2 id="taskFormTitle">New Task</h2>
+        <div class="form-label">
+          <label for="taskName" class="form-label">Task Name:</label>
+          <input
+            type="text"
+            name="taskName"
+            id="taskName"
+            placeholder="Task name.."
+            autocomplete="off"
+          />
+        </div>
+        <div class="form-label">
+          <label for="dueDate" class="form-label">Due Date:</label>
+          <input type="date" name="dueDate" id="dueDate" />
+        </div>
+        <div class="form-label">
+          <label for="priority" class="form-label">Priority:</label>
+          <select name="ddlPriority" id="ddlPriority">
+            <option value="3">N/a</option>
+            <option value="2">Low</option>
+            <option value="1">Medium</option>
+            <option value="0">High</option>
+          </select>
+        </div>
 
-
-
-    <div id='popup' class='form-popup'>
-        <form action="new-task" class='form-container' id='taskForm'>
-            <h2 id=taskFormTitle>New Task</h2>
-            <div class="form-label">
-                <label for="taskName" class="form-label">Task Name:</label>
-                <input type="text" name="taskName" id="taskName" placeholder="Task name.." autocomplete="off">
-            </div>
-            <div class="form-label">
-                <label for="dueDate" class="form-label">Due Date:</label>
-                <input type="date" name="dueDate" id="dueDate">
-            </div>
-            <div class="form-label">
-                <label for="priority" class="form-label">Priority:</label>
-                <select name="ddlPriority" id="ddlPriority">
-                    <option value='3'>N/a</option>
-                    <option value='2'>Low</option>
-                    <option value='1'>Medium</option>
-                    <option value='0'>High</option>
-                </select>
-            </div class="form-label">
-
-            <label for="description" class="form-label">Description/Notes:</label>
-            <textarea id="description" name="description" placeholder="Task description or notes.. (optional)" rows="4"
-                cols="50" style="margin: 10px;"></textarea>
-            <div class="form-label">
-                <button type="submit" id="submitTask">Submit</button>
-                <button type="button" id="btnCloseTask">Close</button>
-            </div>
-        </form>
+        <label for="description" class="form-label">Description/Notes:</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Task description or notes.. (optional)"
+          rows="4"
+          cols="50"
+          style="margin: 10px"
+        ></textarea>
+        <div class="form-label">
+          <button type="submit" id="submitTask">Submit</button>
+          <button type="button" id="btnCloseTask">Close</button>
+        </div>
+      </form>
     </div>
     <script src="main.js"></script>
-</body>
-
+  </body>
 </html>
